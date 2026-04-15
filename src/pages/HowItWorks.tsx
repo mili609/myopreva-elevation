@@ -90,6 +90,64 @@ export default function HowItWorks() {
         </div>
       </section>
 
+      {/* Interactive Flow — DARK */}
+      <section className="py-28 surface-dark relative overflow-hidden">
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, hsla(210,100%,52%,0.05) 0%, transparent 60%)" }} />
+        <div className="container mx-auto px-6 relative z-10">
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <span className="text-primary text-sm font-semibold uppercase tracking-widest">Treatment Flow</span>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold mt-4 mb-4" style={{ color: "hsl(220 20% 95%)" }}>Your MyoPREVA Journey</h2>
+              <p className="max-w-2xl mx-auto" style={{ color: "hsl(220 15% 60%)" }}>From consultation to vision protection in three simple steps</p>
+            </div>
+          </ScrollReveal>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 relative">
+              {/* Connecting lines */}
+              <div className="hidden md:block absolute top-20 left-1/3 right-1/3 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+              <div className="hidden md:block absolute top-20 right-0 left-2/3 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent" />
+
+              {[
+                {
+                  step: "1",
+                  icon: "📋",
+                  title: "Patient Assessment",
+                  desc: "Comprehensive eye examination and myopia evaluation by licensed practitioners",
+                },
+                {
+                  step: "2",
+                  icon: "🔬",
+                  title: "Custom Application",
+                  desc: "MyoPREVA film precisely applied to your child's spectacle lenses",
+                },
+                {
+                  step: "3",
+                  icon: "✓",
+                  title: "Ongoing Monitoring",
+                  desc: "Regular follow-ups to track myopia progression and ensure optimal results",
+                },
+              ].map((item, i) => (
+                <ScrollReveal key={i} delay={i * 150}>
+                  <div className="relative">
+                    <div className="glass-dark-strong rounded-2xl p-8 text-center hover-lift border" style={{ borderColor: "hsla(210,100%,52%,0.15)" }}>
+                      <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center mx-auto mb-4 text-3xl group-hover:scale-110 transition-transform">
+                        {item.icon}
+                      </div>
+                      <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm">
+                        {item.step}
+                      </div>
+                      <h3 className="font-heading font-bold text-lg mb-3" style={{ color: "hsl(220 20% 90%)" }}>{item.title}</h3>
+                      <p style={{ color: "hsl(220 15% 60%)" }}>{item.desc}</p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Video Section — DARK */}
       <section className="py-24 surface-dark relative overflow-hidden">
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 80%, hsla(210,100%,52%,0.06) 0%, transparent 50%)" }} />

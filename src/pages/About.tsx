@@ -75,6 +75,48 @@ export default function About() {
         </section>
       ))}
 
+      {/* Timeline — LIGHT */}
+      <section className="py-28 bg-gradient-to-b from-background via-slate-50 to-background relative">
+        <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(ellipse at 50% 0%, hsla(210, 100%, 52%, 0.08), transparent 50%)" }} />
+        <div className="container mx-auto px-6 relative z-10">
+          <ScrollReveal>
+            <div className="text-center mb-16">
+              <span className="inline-block text-primary text-sm font-semibold uppercase tracking-widest px-4 py-2 rounded-full" style={{ background: "hsla(210, 100%, 52%, 0.08)", border: "1px solid hsla(210, 100%, 52%, 0.15)" }}>Our Journey</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6 text-foreground">
+                Innovation Through the Years
+              </h2>
+            </div>
+          </ScrollReveal>
+
+          <div className="max-w-3xl mx-auto">
+            {[
+              { year: "2015", title: "Research Begins", desc: "Initial research into neuro-optical innovations for myopia control" },
+              { year: "2019", title: "Breakthrough Discovery", desc: "Patent-pending film technology validated through clinical trials" },
+              { year: "2022", title: "Clinical Launch", desc: "First clinical applications with practitioner partnerships" },
+              { year: "2025", title: "Global Expansion", desc: "Scaling operations to serve families worldwide" },
+            ].map((milestone, i) => (
+              <ScrollReveal key={i} delay={i * 100}>
+                <div className="relative mb-12 pb-12 border-b border-slate-200 last:border-b-0 hover-scale">
+                  <div className="flex gap-6">
+                    <div className="flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center text-white font-bold shadow-glow">
+                        {i + 1}
+                      </div>
+                      {i < 3 && <div className="w-1 h-12 bg-gradient-to-b from-primary to-transparent mt-2" />}
+                    </div>
+                    <div className="pt-2">
+                      <p className="text-sm font-semibold text-primary mb-1">{milestone.year}</p>
+                      <h3 className="font-heading text-xl font-bold text-foreground mb-2">{milestone.title}</h3>
+                      <p className="text-muted-foreground">{milestone.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Founder Quote — DARK */}
       <section className="py-24 surface-dark relative overflow-hidden">
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 50% 50%, hsla(168,60%,44%,0.05) 0%, transparent 50%)" }} />

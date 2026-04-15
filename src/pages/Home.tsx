@@ -211,6 +211,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials — LIGHT */}
+      <section className="py-28 relative bg-gradient-to-b from-background via-slate-50 to-background">
+        <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(ellipse at 50% 0%, hsla(210, 100%, 52%, 0.08), transparent 50%)" }} />
+        <div className="container mx-auto px-6 relative z-10">
+          <ScrollReveal>
+            <div className="text-center mb-20">
+              <span className="inline-block text-primary text-sm font-semibold uppercase tracking-widest px-4 py-2 rounded-full" style={{ background: "hsla(210, 100%, 52%, 0.08)", border: "1px solid hsla(210, 100%, 52%, 0.15)" }}>Trusted By Practitioners</span>
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6 text-foreground">
+                Real Results From Real Experts
+              </h2>
+              <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
+                Leading optometrists and ophthalmologists trust MyoPREVA for effective myopia control
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <div className="grid md:grid-cols-3 gap-6 mt-16">
+            {[
+              { name: "Dr. Sarah Chen", title: "Optometrist", quote: "MyoPREVA transformed how we manage myopia. Our patients see real results." },
+              { name: "Dr. James Wilson", title: "Ophthalmologist", quote: "The precision optics are unmatched. A game-changer for clinical practice." },
+              { name: "Dr. Maria Santos", title: "Pediatric Eye Care", quote: "Finally, a solution that's accessible and effective for all patients." },
+            ].map((testimonial, i) => (
+              <ScrollReveal key={i} delay={i * 100}>
+                <div className="glass-strong rounded-2xl p-8 hover-lift cursor-pointer border border-primary/10 hover:border-primary/20 transition-all duration-300 group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, j) => (
+                        <span key={j} className="text-primary">★</span>
+                      ))}
+                    </div>
+                    <p className="text-foreground italic mb-6 leading-relaxed text-base">"{testimonial.quote}"</p>
+                    <div>
+                      <p className="font-heading font-bold text-foreground">{testimonial.name}</p>
+                      <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA — DARK */}
       <section className="py-32 surface-dark relative overflow-hidden">
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, hsla(222, 40%, 12%, 1) 0%, hsla(210, 40%, 15%, 1) 100%), radial-gradient(ellipse at 50% 50%, hsla(210,100%,52%,0.1) 0%, transparent 60%)" }} />
