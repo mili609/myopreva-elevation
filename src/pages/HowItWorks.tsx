@@ -90,7 +90,7 @@ export default function HowItWorks() {
       </section>
 
       {/* Video Section */}
-      <section className="py-20 bg-gradient-to-b from-background to-teal-50/30">
+      <section className="py-20 bg-gradient-to-b from-background to-sage-50/30">
         <div className="container mx-auto px-6">
           <ScrollReveal>
             <div className="text-center mb-12">

@@ -10,7 +10,7 @@ export default function GetStarted() {
   return (
     <div className="pt-24">
       <section className="py-20 min-h-[80vh] relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-50/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-br from-sage-50/50 to-background" />
         <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal>
             <div className="text-center mb-16">
