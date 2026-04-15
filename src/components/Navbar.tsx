@@ -7,7 +7,6 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
   { to: "/how-it-works", label: "How It Works" },
-  { to: "/order", label: "Order Now" },
 ];
 
 export default function Navbar() {
@@ -27,7 +26,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "glass-strong py-3 shadow-neon"
+          ? "glass-dark-strong py-3 shadow-neon backdrop-blur-xl"
           : "bg-transparent py-5"
       }`}
     >
@@ -45,14 +44,14 @@ export default function Navbar() {
             <Link
               key={link.to}
               to={link.to}
-              className={`relative text-sm font-medium transition-colors duration-300 hover:text-primary ${
+              className={`relative text-sm font-medium transition-all duration-300 ${
                 location.pathname === link.to
-                  ? "text-primary"
-                  : "text-foreground/70"
+                  ? "text-white"
+                  : "text-slate-200 hover:text-white"
               } after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:rounded-full after:transition-all after:duration-300 ${
                 location.pathname === link.to
                   ? "after:w-full after:bg-primary after:shadow-glow"
-                  : "after:w-0 after:bg-primary hover:after:w-full"
+                  : "after:w-0 after:bg-gradient-to-r after:from-primary after:to-accent hover:after:w-full"
               }`}
             >
               {link.label}
@@ -74,18 +73,16 @@ export default function Navbar() {
         </button>
       </div>
 
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-500 ${
+        <div className="md:hidden overflow-hidden transition-all duration-500 ${
           mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
-      >
-        <div className="glass-strong mx-4 mt-2 rounded-2xl p-6 flex flex-col gap-4">
+        }">
+        <div className="glass-dark-strong mx-4 mt-2 rounded-2xl p-6 flex flex-col gap-4">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               className={`text-sm font-medium py-2 transition-colors ${
-                location.pathname === link.to ? "text-primary" : "text-foreground/70"
+                location.pathname === link.to ? "text-primary" : "text-slate-200"
               }`}
             >
               {link.label}

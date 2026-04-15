@@ -10,7 +10,6 @@ import ParticleBackground from "@/components/ParticleBackground";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import HowItWorks from "./pages/HowItWorks";
-import OrderNow from "./pages/OrderNow";
 import GetStarted from "./pages/GetStarted";
 import NotFound from "./pages/NotFound";
 
@@ -37,7 +36,6 @@ function AnimatedRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/order" element={<OrderNow />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

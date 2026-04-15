@@ -26,7 +26,6 @@ export default function Footer() {
                 { to: "/", label: "Home" },
                 { to: "/about", label: "About Us" },
                 { to: "/how-it-works", label: "How It Works" },
-                { to: "/order", label: "Order Now" },
               ].map((link) => (
                 <li key={link.to}>
                   <Link to={link.to} className="hover:text-primary transition-colors duration-300" style={{ color: "hsl(220 15% 55%)" }}>
