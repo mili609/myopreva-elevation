@@ -27,7 +27,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "glass-strong py-3 shadow-md"
+          ? "glass-strong py-3 shadow-neon"
           : "bg-transparent py-5"
       }`}
     >
@@ -40,7 +40,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
@@ -50,8 +49,10 @@ export default function Navbar() {
                 location.pathname === link.to
                   ? "text-primary"
                   : "text-foreground/70"
-              } after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 ${
-                location.pathname === link.to ? "after:w-full" : "after:w-0 hover:after:w-full"
+              } after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:rounded-full after:transition-all after:duration-300 ${
+                location.pathname === link.to
+                  ? "after:w-full after:bg-primary after:shadow-glow"
+                  : "after:w-0 after:bg-primary hover:after:w-full"
               }`}
             >
               {link.label}
@@ -59,13 +60,12 @@ export default function Navbar() {
           ))}
           <Link
             to="/get-started"
-            className="gradient-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-glow hover:scale-105"
+            className="btn-shine gradient-primary text-primary-foreground px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:shadow-glow hover:scale-105"
           >
             Get Started
           </Link>
         </nav>
 
-        {/* Mobile toggle */}
         <button
           className="md:hidden text-foreground p-2"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -74,7 +74,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-500 ${
           mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
