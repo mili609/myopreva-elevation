@@ -117,8 +117,9 @@ export default function Home() {
       </section>
 
       {/* Stats — LIGHT */}
-      <section className="py-24 relative z-10 bg-background">
-        <div className="container mx-auto px-6">
+      <section className="py-24 relative z-10 bg-gradient-to-b from-background via-background to-slate-50">
+        <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(ellipse at 20% 50%, hsla(210, 100%, 52%, 0.05), transparent 50%), radial-gradient(ellipse at 80% 50%, hsla(168, 60%, 44%, 0.03), transparent 50%)" }} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, i) => (
               <ScrollReveal key={i} delay={i * 100}>
@@ -172,8 +173,9 @@ export default function Home() {
       </section>
 
       {/* Product — LIGHT */}
-      <section className="py-28 bg-background relative">
-        <div className="container mx-auto px-6">
+      <section className="py-28 bg-gradient-to-b from-slate-50 via-background to-background relative">
+        <div className="absolute inset-0 opacity-40" style={{ background: "radial-gradient(ellipse at top right, hsla(210, 100%, 52%, 0.08), transparent 60%), radial-gradient(ellipse at bottom left, hsla(168, 60%, 44%, 0.05), transparent 60%)" }} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal>
               <div className="rounded-3xl overflow-hidden shadow-2xl border border-primary/10 hover:border-primary/20 transition-all duration-300 hover-lift group">
