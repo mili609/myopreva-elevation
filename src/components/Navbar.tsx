@@ -73,9 +73,11 @@ export default function Navbar() {
         </button>
       </div>
 
-        <div className="md:hidden overflow-hidden transition-all duration-500 ${
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-500 ${
           mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }">
+        }`}
+      >
         <div className="glass-dark-strong mx-4 mt-2 rounded-2xl p-6 flex flex-col gap-4">
           {navLinks.map((link) => (
             <Link
