@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Mail, Linkedin, Twitter, MessageCircle } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export default function Footer() {
@@ -39,21 +38,10 @@ export default function Footer() {
               <p className="text-sm leading-relaxed mb-6" style={{ color: "hsl(220 15% 55%)" }}>
                 Pioneering neuro-optical innovation from Singapore to protect children's vision worldwide.
               </p>
-              <div className="flex gap-4">
-                {[
-                  { icon: Linkedin, href: "#" },
-                  { icon: Twitter, href: "#" },
-                  { icon: MessageCircle, href: "#" },
-                  { icon: Mail, href: "mailto:MyoPREVA@gmail.com" },
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href={social.href}
-                    className="w-10 h-10 rounded-lg bg-white/5 hover:bg-primary/20 flex items-center justify-center transition-all duration-300 hover:scale-110 text-slate-400 hover:text-primary"
-                  >
-                    <social.icon size={18} />
-                  </a>
-                ))}
+              <div className="flex gap-4 text-sm">
+                <a href="#" style={{ color: "hsl(220 15% 55%)" }} className="hover:text-primary transition-colors">LinkedIn</a>
+                <a href="#" style={{ color: "hsl(220 15% 55%)" }} className="hover:text-primary transition-colors">Twitter</a>
+                <a href="#" style={{ color: "hsl(220 15% 55%)" }} className="hover:text-primary transition-colors">Contact</a>
               </div>
             </div>
 
