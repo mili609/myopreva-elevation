@@ -47,7 +47,7 @@ export default function Home() {
         {/* Enhanced glow orbs */}
         <div className="absolute top-32 -right-20 w-[600px] h-[600px] bg-primary/8 rounded-full blur-3xl animate-pulse-glow" />
         <div className="absolute -bottom-32 -left-20 w-[500px] h-[500px] bg-accent/6 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
-        <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl" style={{ animationDelay: "0.75s" }} className="animate-pulse-glow" />
+        <div className="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "0.75s" }} />
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
