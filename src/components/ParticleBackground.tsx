@@ -39,7 +39,7 @@ export default function ParticleBackground() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(174, 62%, 42%, ${p.opacity})`;
+        ctx.fillStyle = `hsla(140, 18%, 42%, ${p.opacity})`;
         ctx.fill();
       });
       animationId = requestAnimationFrame(animate);
