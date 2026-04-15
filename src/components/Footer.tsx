@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Linkedin, Twitter, Facebook } from "lucide-react";
+import { Mail, Linkedin, Twitter, Github } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export default function Footer() {
@@ -43,7 +43,7 @@ export default function Footer() {
                 {[
                   { icon: Linkedin, href: "#" },
                   { icon: Twitter, href: "#" },
-                  { icon: Facebook, href: "#" },
+                  { icon: Github, href: "#" },
                   { icon: Mail, href: "mailto:MyoPREVA@gmail.com" },
                 ].map((social, i) => (
                   <a
