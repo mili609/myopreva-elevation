@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [opacity, setOpacity] = useState(0.05); // Start with very low opacity
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -82,11 +83,51 @@ export default function ParticleBackground() {
     };
   }, []);
 
+  // Detect background color and adjust particle opacity
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check the background color at the center of the viewport
+      const centerY = window.innerHeight / 2;
+      const element = document.elementFromPoint(window.innerWidth / 2, centerY);
+      
+      if (!element) return;
+
+      // Get computed background color
+      const bgColor = window.getComputedStyle(element).backgroundColor;
+      
+      // Check if it's a light or dark background
+      // Light backgrounds (like white or light gray): rgb values are high
+      // Dark backgrounds: rgb values are low
+      const isDarkSection = isDarkBackground(bgColor);
+      
+      // Smooth transition: dark sections show particles (0.6), light sections hide them (0.02)
+      setOpacity(isDarkSection ? 0.6 : 0.02);
+    };
+
+    const isDarkBackground = (bgColor: string): boolean => {
+      // Parse rgb/rgba color
+      const match = bgColor.match(/\d+/g);
+      if (!match || match.length < 3) return false;
+      
+      const [r, g, b] = match.map(Number);
+      // Calculate luminance
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // If luminance < 0.5, it's dark; if >= 0.5, it's light
+      return luminance < 0.5;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial state
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
-      style={{ opacity: 0.6 }}
+      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500"
+      style={{ opacity }}
     />
   );
 }
