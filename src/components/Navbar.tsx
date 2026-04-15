@@ -16,33 +16,18 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const detectBackgroundLuminance = () => {
-      // Get element at navbar position (80px from top)
-      const navbarY = 80;
-      const element = document.elementFromPoint(window.innerWidth / 2, navbarY);
+    const detectSection = () => {
+      const navbarHeight = 80;
       
-      if (element) {
-        const bgColor = window.getComputedStyle(element).backgroundColor;
-        
-        // Parse RGB values
-        const rgbMatch = bgColor.match(/\d+/g);
-        if (rgbMatch && rgbMatch.length >= 3) {
-          const [r, g, b] = rgbMatch.map(Number);
-          // Calculate luminance using standard formula
-          const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-          // Dark if luminance < 0.5
-          setIsDarkSection(luminance < 0.5);
-          return;
-        }
-      }
-      
-      // Fallback: check for dark sections
+      // Get all dark sections on the page
       const darkSections = document.querySelectorAll(".surface-dark");
-      let isOverDark = false;
       
+      // Check if navbar is over any dark section
+      let isOverDark = false;
       darkSections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        if (rect.top <= navbarY && rect.bottom > navbarY) {
+        // Navbar is over dark section if navbar top is within section
+        if (rect.top <= navbarHeight && rect.bottom > 0) {
           isOverDark = true;
         }
       });
@@ -52,41 +37,52 @@ export default function Navbar() {
 
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      detectBackgroundLuminance();
+      detectSection();
     };
 
-    window.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onScroll);
-    onScroll();
+    // Initial detection
+    detectSection();
+    
+    // Listen to scroll with high frequency
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", detectSection, { passive: true });
     
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", detectSection);
     };
   }, []);
 
   useEffect(() => setMobileOpen(false), [location]);
 
-  // Dynamic color classes based on section
-  const textColorClass = isDarkSection ? "text-white" : "text-slate-900";
-  const textLightClass = isDarkSection ? "text-slate-200" : "text-slate-600";
-  const hoverGlowClass = isDarkSection 
-    ? "hover:text-blue-300 hover:shadow-[0_0_8px_rgba(96,165,250,0.4)]" 
-    : "hover:text-blue-600";
-  const underlineColorClass = isDarkSection ? "after:bg-blue-400" : "after:bg-blue-600";
+  // HARD COLOR VALUES - NO OPACITY TRICKS
+  const textColor = isDarkSection ? "#FFFFFF" : "#111827"; // White or dark charcoal
+  const linkHoverColor = isDarkSection ? "#38BDF8" : "#1E40AF"; // Cyan or dark blue
+  const activeColor = isDarkSection ? "#38BDF8" : "#2563EB"; // Cyan or bright blue
+  const navBgColor = scrolled 
+    ? (isDarkSection ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.85)")
+    : "transparent";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      style={{
+        backgroundColor: navBgColor,
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled 
+          ? isDarkSection 
+            ? "1px solid rgba(59, 130, 246, 0.2)"
+            : "1px solid rgba(226, 232, 240, 0.5)"
+          : "none",
+        boxShadow: scrolled
           ? isDarkSection
-            ? "bg-slate-900/70 backdrop-blur-xl py-3 shadow-[0_4px_20px_rgba(0,0,0,0.3)] border-b border-blue-400/20"
-            : "bg-white/70 backdrop-blur-xl py-3 shadow-md border-b border-slate-200/40"
-          : "bg-transparent py-5"
-      }`}
+            ? "0 4px 20px rgba(0, 0, 0, 0.3)"
+            : "0 4px 12px rgba(0, 0, 0, 0.08)"
+          : "none",
+      }}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
+      <div className="container mx-auto px-6 flex items-center justify-between h-20">
+        <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
           <img
             src={logo}
             alt="MyoPREVA"
@@ -95,77 +91,118 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`relative text-sm font-semibold transition-all duration-300 ${
-                location.pathname === link.to 
-                  ? `${textColorClass} font-bold` 
-                  : `${textColorClass} ${hoverGlowClass}`
-              } after:content-[''] after:absolute after:bottom-[-6px] after:left-0 after:h-[2.5px] after:rounded-full after:transition-all after:duration-300 after:shadow-lg ${
-                location.pathname === link.to
-                  ? `after:w-full ${underlineColorClass} after:shadow-[0_0_12px_rgba(59,130,246,0.6)]`
-                  : `after:w-0 ${underlineColorClass} hover:after:w-full`
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.to;
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="relative text-sm font-semibold transition-all duration-300 group"
+                style={{
+                  color: isActive ? activeColor : textColor,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = linkHoverColor;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = textColor;
+                  }
+                }}
+              >
+                {link.label}
+                <span
+                  className="absolute bottom-[-6px] left-0 h-[2.5px] rounded-full transition-all duration-300 group-hover:shadow-lg"
+                  style={{
+                    width: isActive ? "100%" : "0%",
+                    backgroundColor: activeColor,
+                    boxShadow: isActive
+                      ? `0 0 12px ${activeColor}40`
+                      : "none",
+                  }}
+                />
+              </Link>
+            );
+          })}
           <Link
             to="/get-started"
-            className={`btn-shine px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${
-              isDarkSection
-                ? "gradient-primary text-white hover:shadow-[0_0_24px_rgba(59,130,246,0.6)] hover:scale-110"
-                : "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-[0_0_24px_rgba(37,99,235,0.5)] hover:scale-110"
-            }`}
+            className="px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 text-white font-medium hover:scale-110 cursor-pointer"
+            style={{
+              background: isDarkSection
+                ? "linear-gradient(135deg, #3B82F6, #1E40AF)"
+                : "linear-gradient(135deg, #2563EB, #1E40AF)",
+              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = isDarkSection
+                ? "0 0 24px rgba(59, 130, 246, 0.6)"
+                : "0 0 24px rgba(37, 99, 235, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 4px 15px rgba(59, 130, 246, 0.3)";
+            }}
           >
             Get Started
           </Link>
         </nav>
 
         <button
-          className={`md:hidden p-2 transition-colors duration-300 ${textColorClass} hover:text-blue-400`}
+          className="md:hidden p-2 transition-colors duration-300"
+          style={{ color: textColor }}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
+      {/* Mobile Menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-500 ${
           mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className={`mx-4 mt-4 rounded-2xl p-6 flex flex-col gap-4 backdrop-blur-xl transition-all duration-300 ${
-          isDarkSection 
-            ? "bg-slate-800/90 border border-blue-400/20" 
-            : "bg-white/90 border border-slate-200/50"
-        }`}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`text-sm font-semibold py-2 px-3 rounded-lg transition-all duration-300 ${
-                location.pathname === link.to 
-                  ? isDarkSection 
-                    ? "text-blue-300 font-bold bg-blue-400/10" 
-                    : "text-blue-600 font-bold bg-blue-100"
-                  : isDarkSection 
-                    ? "text-slate-200 hover:text-white hover:bg-blue-400/5" 
-                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div
+          className="mx-4 mb-4 rounded-2xl p-6 flex flex-col gap-4 backdrop-blur-xl border transition-all duration-300"
+          style={{
+            backgroundColor: isDarkSection
+              ? "rgba(30, 41, 59, 0.95)"
+              : "rgba(255, 255, 255, 0.95)",
+            borderColor: isDarkSection
+              ? "rgba(59, 130, 246, 0.2)"
+              : "rgba(226, 232, 240, 0.5)",
+          }}
+        >
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.to;
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-sm font-semibold py-2 px-3 rounded-lg transition-all duration-300"
+                style={{
+                  color: isActive ? activeColor : textColor,
+                  backgroundColor: isActive
+                    ? isDarkSection
+                      ? "rgba(59, 130, 246, 0.1)"
+                      : "rgba(37, 99, 235, 0.1)"
+                    : "transparent",
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <Link
             to="/get-started"
-            className={`px-6 py-3 rounded-full text-sm font-semibold text-center transition-all duration-300 ${
-              isDarkSection
-                ? "gradient-primary text-white hover:shadow-[0_0_16px_rgba(59,130,246,0.5)]"
-                : "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:shadow-[0_0_16px_rgba(37,99,235,0.5)]"
-            }`}
+            className="px-6 py-3 rounded-full text-sm font-semibold text-center transition-all duration-300 text-white cursor-pointer"
+            style={{
+              background: isDarkSection
+                ? "linear-gradient(135deg, #3B82F6, #1E40AF)"
+                : "linear-gradient(135deg, #2563EB, #1E40AF)",
+              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+            }}
           >
             Get Started
           </Link>
