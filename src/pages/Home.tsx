@@ -84,7 +84,7 @@ export default function Home() {
 
             <ScrollReveal delay={200}>
               <div className="relative">
-                <div className="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-inset" style={{ boxShadow: "0 25px 80px -15px hsla(210,100%,52%,0.15)", ringColor: "hsla(220,20%,50%,0.1)" }}>
+                <div className="rounded-3xl overflow-hidden shadow-2xl border border-primary/10" style={{ boxShadow: "0 25px 80px -15px hsla(210,100%,52%,0.15)" }}>
                   <img
                     src={heroChild}
                     alt="Child receiving eye examination at clinic"
