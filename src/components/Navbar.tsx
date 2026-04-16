@@ -9,87 +9,87 @@ const navLinks = [
   { to: "/how-it-works", label: "How It Works" },
 ];
 
+// TASK 2: Route-based navbar theme config
+const ROUTE_THEME = {
+  "/": "dynamic",
+  "/about": "light",
+  "/how-it-works": "light",
+  "/get-started": "light",
+} as Record<string, "dynamic" | "light" | "dark">;
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isDarkSection, setIsDarkSection] = useState(true);
+  const [isDarkBg, setIsDarkBg] = useState(true);
   const location = useLocation();
 
+  const currentPath = location.pathname;
+  const themeMode = ROUTE_THEME[currentPath] || "light";
+
+  // TASK 1: Dynamic background detection for scroll-based switching
   useEffect(() => {
-    const detectSection = () => {
-      const navbarHeight = 80;
-      
-      // Get all dark sections on the page
-      const darkSections = document.querySelectorAll(".surface-dark");
-      
-      // Check if navbar is over any dark section
-      let isOverDark = false;
-      darkSections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        // Navbar is over dark section if navbar top is within section
-        if (rect.top <= navbarHeight && rect.bottom > 0) {
-          isOverDark = true;
-        }
-      });
-      
-      setIsDarkSection(isOverDark);
+    const detectBackground = () => {
+      if (themeMode === "dynamic") {
+        const darkSections = document.querySelectorAll(".surface-dark");
+        let isOverDark = false;
+
+        darkSections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 80 && rect.bottom > 0) {
+            isOverDark = true;
+          }
+        });
+
+        setIsDarkBg(isOverDark);
+      } else if (themeMode === "light") {
+        setIsDarkBg(false);
+      } else {
+        setIsDarkBg(true);
+      }
     };
 
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      detectSection();
+      detectBackground();
     };
 
-    // Initial detection
-    detectSection();
-    
-    // Listen to scroll with high frequency
+    detectBackground();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", detectSection, { passive: true });
-    
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", detectSection);
-    };
-  }, []);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [themeMode]);
 
-  useEffect(() => setMobileOpen(false), [location]);
-
-  // HARD COLOR VALUES - NO OPACITY TRICKS
-  const textColor = isDarkSection ? "#FFFFFF" : "#111827"; // White or dark charcoal
-  const linkHoverColor = isDarkSection ? "#38BDF8" : "#1E40AF"; // Cyan or dark blue
-  const activeColor = isDarkSection ? "#38BDF8" : "#2563EB"; // Cyan or bright blue
-  const navBgColor = scrolled 
-    ? (isDarkSection ? "rgba(15, 23, 42, 0.85)" : "rgba(255, 255, 255, 0.85)")
+  // TASK 1: Explicit color definitions - NO OPACITY
+  const textColor = isDarkBg ? "#FFFFFF" : "#111111";
+  const hoverColor = isDarkBg ? "#60A5FA" : "#000000";
+  const activeColor = isDarkBg ? "#60A5FA" : "#3B82F6";
+  
+  const bgColor = scrolled
+    ? isDarkBg
+      ? "rgba(15, 23, 42, 0.95)"
+      : "rgba(255, 255, 255, 0.95)"
     : "transparent";
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
-        backgroundColor: navBgColor,
-        backdropFilter: scrolled ? "blur(12px)" : "none",
-        borderBottom: scrolled 
-          ? isDarkSection 
+        backgroundColor: bgColor,
+        backdropFilter: scrolled ? "blur(8px)" : "none",
+        transition: "background-color 0.2s ease, backdrop-filter 0.2s ease",
+        borderBottom: scrolled
+          ? isDarkBg
             ? "1px solid rgba(59, 130, 246, 0.2)"
-            : "1px solid rgba(226, 232, 240, 0.5)"
-          : "none",
-        boxShadow: scrolled
-          ? isDarkSection
-            ? "0 4px 20px rgba(0, 0, 0, 0.3)"
-            : "0 4px 12px rgba(0, 0, 0, 0.08)"
+            : "1px solid rgba(200, 214, 225, 0.3)"
           : "none",
       }}
     >
       <div className="container mx-auto px-6 flex items-center justify-between h-20">
-        <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
-          <img
-            src={logo}
-            alt="MyoPREVA"
-            className="h-10 md:h-12 transition-transform duration-300 group-hover:scale-110"
-          />
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+          <img src={logo} alt="MyoPREVA" className="h-10 md:h-12" />
         </Link>
 
+        {/* Desktop Navigation - TASK 1: Explicit text color, NO opacity */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.to;
@@ -97,60 +97,67 @@ export default function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="relative text-sm font-semibold transition-all duration-300 group"
+                className="relative text-sm font-bold transition-colors duration-200"
                 style={{
                   color: isActive ? activeColor : textColor,
+                  opacity: 1,
+                  letterSpacing: "0.5px",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.color = linkHoverColor;
+                    (e.currentTarget as HTMLAnchorElement).style.color = hoverColor;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.color = textColor;
+                    (e.currentTarget as HTMLAnchorElement).style.color = textColor;
                   }
                 }}
               >
                 {link.label}
-                <span
-                  className="absolute bottom-[-6px] left-0 h-[2.5px] rounded-full transition-all duration-300 group-hover:shadow-lg"
-                  style={{
-                    width: isActive ? "100%" : "0%",
-                    backgroundColor: activeColor,
-                    boxShadow: isActive
-                      ? `0 0 12px ${activeColor}40`
-                      : "none",
-                  }}
-                />
+                {isActive && (
+                  <span
+                    className="absolute bottom-[-8px] left-0 w-full h-0.5 rounded-full"
+                    style={{
+                      backgroundColor: activeColor,
+                      boxShadow: `0 0 8px ${activeColor}80`,
+                    }}
+                  />
+                )}
               </Link>
             );
           })}
+
+          {/* CTA Button */}
           <Link
             to="/get-started"
-            className="px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 text-white font-medium hover:scale-110 cursor-pointer"
+            className="px-6 py-2.5 rounded-full text-sm font-bold text-white transition-all duration-200"
             style={{
-              background: isDarkSection
-                ? "linear-gradient(135deg, #3B82F6, #1E40AF)"
-                : "linear-gradient(135deg, #2563EB, #1E40AF)",
-              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+              background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+              boxShadow: "0 4px 14px rgba(59, 130, 246, 0.4)",
+              opacity: 1,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = isDarkSection
-                ? "0 0 24px rgba(59, 130, 246, 0.6)"
-                : "0 0 24px rgba(37, 99, 235, 0.5)";
+              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(59, 130, 246, 0.6)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 4px 15px rgba(59, 130, 246, 0.3)";
+              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)";
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 14px rgba(59, 130, 246, 0.4)";
             }}
           >
             Get Started
           </Link>
         </nav>
 
+        {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 transition-colors duration-300"
-          style={{ color: textColor }}
+          className="md:hidden p-2"
+          style={{
+            color: textColor,
+            opacity: 1,
+            transition: "color 0.2s ease",
+          }}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -159,19 +166,16 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-500 ${
-          mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        className={`md:hidden overflow-hidden transition-all duration-300 ${
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div
-          className="mx-4 mb-4 rounded-2xl p-6 flex flex-col gap-4 backdrop-blur-xl border transition-all duration-300"
+          className="border-t px-6 py-4 flex flex-col gap-2"
           style={{
-            backgroundColor: isDarkSection
-              ? "rgba(30, 41, 59, 0.95)"
-              : "rgba(255, 255, 255, 0.95)",
-            borderColor: isDarkSection
-              ? "rgba(59, 130, 246, 0.2)"
-              : "rgba(226, 232, 240, 0.5)",
+            backgroundColor: isDarkBg ? "rgba(15, 23, 42, 0.98)" : "rgba(248, 250, 252, 0.98)",
+            borderTopColor: isDarkBg ? "rgba(59, 130, 246, 0.2)" : "rgba(200, 214, 225, 0.3)",
+            backdropFilter: "blur(8px)",
           }}
         >
           {navLinks.map((link) => {
@@ -180,14 +184,16 @@ export default function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="text-sm font-semibold py-2 px-3 rounded-lg transition-all duration-300"
+                className="text-sm font-bold py-2.5 px-4 rounded-lg transition-colors duration-200"
                 style={{
                   color: isActive ? activeColor : textColor,
                   backgroundColor: isActive
-                    ? isDarkSection
-                      ? "rgba(59, 130, 246, 0.1)"
-                      : "rgba(37, 99, 235, 0.1)"
+                    ? isDarkBg
+                      ? "rgba(59, 130, 246, 0.15)"
+                      : "rgba(59, 130, 246, 0.1)"
                     : "transparent",
+                  opacity: 1,
+                  letterSpacing: "0.5px",
                 }}
               >
                 {link.label}
@@ -196,12 +202,11 @@ export default function Navbar() {
           })}
           <Link
             to="/get-started"
-            className="px-6 py-3 rounded-full text-sm font-semibold text-center transition-all duration-300 text-white cursor-pointer"
+            className="px-6 py-3 rounded-full text-sm font-bold text-white text-center transition-all duration-200 mt-2"
             style={{
-              background: isDarkSection
-                ? "linear-gradient(135deg, #3B82F6, #1E40AF)"
-                : "linear-gradient(135deg, #2563EB, #1E40AF)",
-              boxShadow: "0 4px 15px rgba(59, 130, 246, 0.3)",
+              background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+              boxShadow: "0 4px 14px rgba(59, 130, 246, 0.4)",
+              opacity: 1,
             }}
           >
             Get Started
