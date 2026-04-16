@@ -32,8 +32,9 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
             {/* Brand Column */}
             <div className="md:col-span-1">
-              <Link to="/" className="inline-block mb-6">
-                <img src={logo} alt="MyoPREVA" className="h-10 brightness-0 invert hover:opacity-80 transition-opacity" />
+              <Link to="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
+                <img src={logo} alt="MyoPREVA" className="h-10" />
+                <span className="font-heading font-bold text-lg" style={{ color: "hsl(220 20% 95%)" }}>MYOPREVA</span>
               </Link>
               <p className="text-sm leading-relaxed mb-6" style={{ color: "hsl(220 15% 55%)" }}>
                 Pioneering neuro-optical innovation from Singapore to protect children's vision worldwide.
